@@ -1,12 +1,13 @@
 import numpy as np
+import pygame
+
 
 class Brain:
-    def __int__(self):
-        self.tick_tack = [["00", "01", "02"],
-                          ["10", "11", "12"],
-                          ["20", "21", "22"]]
-        self.marker1 = "X"
-        self.marker2 = "O"
+    def __init__(self):
+        self.tick_tack = [["00", "01", "02"], ["10", "11", "12"], ["20", "21", "22"]]
+        self.marker_brain = True
+        self.clicked_or_not_1d = []
+        self.clicked_or_not_2d = []
 
     def checker(self):
         t_array = np.array(self.tick_tack). \
@@ -25,3 +26,20 @@ class Brain:
 
     def add_mark(self, n, m, marker):
         self.tick_tack[n][m] = marker
+
+    def handle_click(self, tick_tack_box):
+        self.clicked_or_not_2d = []
+        # when user clicks on a box it checks which one was clicked and appends true or false in
+        # clicked_or_not based on that
+        for n in tick_tack_box:
+            self.clicked_or_not_2d.append(n.collidepoint(pygame.mouse.get_pos()))
+
+        self.clicked_or_not_1d = self.clicked_or_not_2d
+        # Making the clicked_or_not list into 2d list for future use
+        self.clicked_or_not_2d = [self.clicked_or_not_2d[n - 3: n] for n in range(3, 10, 3)]
+
+    def add_marker_brain(self,marker_type):
+        # enumerating the clicked_or_not to get the index of the place clicked.
+        for n, m in enumerate(self.clicked_or_not_2d):
+            if True in m:
+                self.add_mark(n, m.index(True), marker=marker_type)
