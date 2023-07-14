@@ -1,6 +1,7 @@
 import pygame
 from brain import Brain
 from ticktackboxmaker import TickTackBoxMaker, tick_tack_borders
+from time import sleep
 
 # setting up Brain
 brain = Brain()
@@ -13,6 +14,10 @@ pygame.init()
 screen = pygame.display.set_mode((400, 500))
 clock = pygame.time.Clock()
 running = True
+# initializing font
+default_font = pygame.font.get_default_font()
+font = pygame.font.SysFont(default_font, size=50, bold=False, italic=False)
+whose_turn = ""
 
 tick_tack_made = []
 
@@ -42,17 +47,34 @@ while running:
             y_marker = add_mark_over.y + width_half
             clk_box_loc_mark = (x_marker, y_marker, marker_brain)  # clicked box location and marker
 
-            if (clk_box_loc_mark[0],clk_box_loc_mark[1]) not in [(n[0],n[1]) for n in tick_tack_made]:
+            if (clk_box_loc_mark[0], clk_box_loc_mark[1]) not in [(n[0], n[1]) for n in tick_tack_made]:
                 tick_tack_made.append(clk_box_loc_mark)
                 marker_brain = not marker_brain
                 brain.add_marker_brain(marker_brain)
-                print(brain.tick_tack)
 
-            won = brain.checker()  # check if someone won
-            if won or len(tick_tack_made) == 9:
+            # check if someone won
+            result = brain.checker()
+
+            if result or len(tick_tack_made) == 9:
+                won = result[0] if result else ""
+                who_won = result[1] if result else ""
+
+                # delaring Name of winner
+                whose_turn = f"{'Square' if who_won else 'Circle'}" + " won" if not len(
+                    tick_tack_made) == 9 else "It's a tie"
+
                 running = False
                 # flip() the display to put your work on screen
 
+    # Turn Teller's logic
+    img = font.render(whose_turn, True, "green")
+    screen.blit(img, (95, 400))
+    if marker_brain:
+        whose_turn = "Circle's Turn"
+    else:
+        whose_turn = "Square's Turn"
+
+    # This re-draws all the marks(circle,Square) on every frame
     for n in tick_tack_made:
         if n[2]:
             pygame.draw.circle(screen, "black", (n[0], n[1]), 40, 10)
@@ -61,5 +83,9 @@ while running:
     pygame.display.flip()
 
     clock.tick(10)  # limits FPS
+
+    # Waiting For 3 Seconds before someone has won or tie
+    if running == False:
+        sleep(3)
 
 pygame.quit()

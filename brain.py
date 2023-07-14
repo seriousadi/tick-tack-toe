@@ -19,10 +19,11 @@ class Brain:
             # checking if 3 boxes are filled with same thing on a horizontal line
             for m in n:
                 if m[0] == m[1] and m[1] == m[2]:
-                    return True
+                    return (True, m[0])
             # checking if diagonal boxes are filled with the same thing
             if n[0][0] == n[1][1] and n[1][1] == n[2][2] or n[2][0] == n[1][1] and n[1][1] == n[0][2]:
-                return True
+                print(n[1][1])
+                return (True, n[1][1])
 
     def add_mark(self, n, m, marker):
         self.tick_tack[n][m] = marker
@@ -38,7 +39,7 @@ class Brain:
         # Making the clicked_or_not list into 2d list for future use
         self.clicked_or_not_2d = [self.clicked_or_not_2d[n - 3: n] for n in range(3, 10, 3)]
 
-    def add_marker_brain(self,marker_type):
+    def add_marker_brain(self, marker_type):
         # enumerating the clicked_or_not to get the index of the place clicked.
         for n, m in enumerate(self.clicked_or_not_2d):
             if True in m:
