@@ -4,15 +4,17 @@ import pygame
 
 class Brain:
     def __init__(self):
-        self.tick_tack = [["00", "01", "02"], ["10", "11", "12"], ["20", "21", "22"]]
+        self.tick_tack = [["00", "01", "02"], 
+                          ["10", "11", "12"], 
+                          ["20", "21", "22"]]
         self.marker_brain = True
         self.clicked_or_not_1d = []
         self.clicked_or_not_2d = []
 
     def checker(self):
-        t_array = np.array(self.tick_tack). \
-            transpose(). \
-            tolist()  # making our list transpose and then converting it back to list
+        t_array = (
+            np.array(self.tick_tack).transpose().tolist()
+        )  # making our list transpose and then converting it back to list
         arrays = [t_array, self.tick_tack]
 
         for n in arrays:
@@ -21,7 +23,12 @@ class Brain:
                 if m[0] == m[1] and m[1] == m[2]:
                     return (True, m[0])
             # checking if diagonal boxes are filled with the same thing
-            if n[0][0] == n[1][1] and n[1][1] == n[2][2] or n[2][0] == n[1][1] and n[1][1] == n[0][2]:
+            if (
+                n[0][0] == n[1][1]
+                and n[1][1] == n[2][2]
+                or n[2][0] == n[1][1]
+                and n[1][1] == n[0][2]
+            ):
                 print(n[1][1])
                 return (True, n[1][1])
 
@@ -31,13 +38,15 @@ class Brain:
     def handle_click(self, tick_tack_box):
         self.clicked_or_not_2d = []
         # when user clicks on a box it checks which one was clicked and appends true or false in
-        # clicked_or_not based on that
+        # "clicked_or_not" based on that
         for n in tick_tack_box:
             self.clicked_or_not_2d.append(n.collidepoint(pygame.mouse.get_pos()))
 
         self.clicked_or_not_1d = self.clicked_or_not_2d
         # Making the clicked_or_not list into 2d list for future use
-        self.clicked_or_not_2d = [self.clicked_or_not_2d[n - 3: n] for n in range(3, 10, 3)]
+        self.clicked_or_not_2d = [
+            self.clicked_or_not_2d[n - 3 : n] for n in range(3, 10, 3)
+        ]
 
     def add_marker_brain(self, marker_type):
         # enumerating the clicked_or_not to get the index of the place clicked.

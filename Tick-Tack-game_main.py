@@ -11,7 +11,7 @@ make_box = TickTackBoxMaker()
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((400, 500))
+screen = pygame.display.set_mode((420, 500))
 clock = pygame.time.Clock()
 running = True
 # initializing font
@@ -28,13 +28,13 @@ while running:
             running = False
 
     # fill the screen with a color to wipe away anything from last frame
-    screen.fill("purple")
+    screen.fill("#1A2A33")
 
     tick_tack_box = make_box.tick_tack_box
 
     # making the border and boxes of the tick-tack board.
     make_box.make_tick_tack_box(screen=screen)  # This is also used as a click detector
-    tick_tack_borders(screen=screen, box_border_color="white")
+    # tick_tack_borders(screen=screen, box_border_color="#1A2A33")
 
     left_mouse_click = pygame.mouse.get_pressed()[0]
     if left_mouse_click:
@@ -45,9 +45,15 @@ while running:
             width_half = add_mark_over.width / 2
             x_marker = add_mark_over.x + width_half
             y_marker = add_mark_over.y + width_half
-            clk_box_loc_mark = (x_marker, y_marker, marker_brain)  # clicked box location and marker
+            clk_box_loc_mark = (
+                x_marker,
+                y_marker,
+                marker_brain,
+            )  # clicked box location and marker
 
-            if (clk_box_loc_mark[0], clk_box_loc_mark[1]) not in [(n[0], n[1]) for n in tick_tack_made]:
+            if (clk_box_loc_mark[0], clk_box_loc_mark[1]) not in [
+                (n[0], n[1]) for n in tick_tack_made
+            ]:
                 tick_tack_made.append(clk_box_loc_mark)
                 marker_brain = not marker_brain
                 brain.add_marker_brain(marker_brain)
@@ -60,8 +66,11 @@ while running:
                 who_won = result[1] if result else ""
 
                 # delaring Name of winner
-                whose_turn = f"{'Square' if who_won else 'Circle'}" + " won" if not len(
-                    tick_tack_made) == 9 else "It's a tie"
+                whose_turn = (
+                    f"{'Square' if who_won else 'Circle'}" + " won"
+                    if not len(tick_tack_made) == 9
+                    else "It's a tie"
+                )
 
                 running = False
                 # flip() the display to put your work on screen
@@ -77,9 +86,9 @@ while running:
     # This re-draws all the marks(circle,Square) on every frame
     for n in tick_tack_made:
         if n[2]:
-            pygame.draw.circle(screen, "black", (n[0], n[1]), 40, 10)
+            pygame.draw.circle(screen, "#31C3BD", (n[0], n[1]), 40, 10)
         else:
-            pygame.draw.rect(screen, "black", (n[0] - 30, n[1] - 30, 68, 68), 10)
+            pygame.draw.rect(screen, "#F2B137", (n[0] - 30, n[1] - 30, 68, 68), 10)
     pygame.display.flip()
 
     clock.tick(10)  # limits FPS
